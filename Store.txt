@@ -1,0 +1,30 @@
+export class Store<T> {
+  // Using a behavior subject so we can provide a default value
+  private state$: BehaviorSubject<T>;  
+
+  protected constructor (initialState: T) {
+     // Setting the default state
+     this.state$ = new BehaviorSubject(initialState);
+  }
+
+  getState(): Observable<T> {
+    return this.state$.asObservable();
+  }
+
+  setState(nextState: T): void {
+    this.state$.next(nextState);
+  }
+}
+
+
+export class AirportService extends Store<Airport[]>{
+
+  constructor() {
+    super([{code: 'SMF', name: "Sacramento International"}]);
+  }
+
+  addAirport(code: string, name: string) {
+    const newState = [...this.getValue(), {code, name}];
+    this.setState(newState);
+  }
+}
